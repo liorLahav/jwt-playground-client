@@ -10,6 +10,8 @@ export const PostsPage = () => {
     queryFn: fetchPosts,
   });
 
+  const likes = () => Math.floor(Math.random() * 100) + 1;
+
   return (
     <div className="min-h-screen w-full bg-[#f8fafc] relative overflow-x-hidden font-sans text-slate-900">
       {/* --- Same 'Tasty' Background Blobs as AddPostPage --- */}
@@ -52,9 +54,11 @@ export const PostsPage = () => {
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-400 to-purple-400"></div>
                   <div>
                     <h3 className="font-bold text-sm text-slate-800">
-                      Anonymous User
+                      {post.userName[0].toUpperCase() + post.userName.slice(1)}
                     </h3>
-                    <p className="text-xs text-slate-400">Just now</p>
+                    <p className="text-xs text-slate-400">
+                      {new Date(post.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 </div>
 
@@ -76,7 +80,7 @@ export const PostsPage = () => {
                 <div className="flex items-center justify-between pt-6 border-t border-slate-100/50">
                   <div className="flex gap-4">
                     <button className="flex items-center gap-1.5 text-slate-400 hover:text-pink-500 transition-colors text-sm font-medium">
-                      <Heart className="w-4 h-4" /> 24
+                      <Heart className="w-4 h-4" /> {likes()}
                     </button>
                     <button className="flex items-center gap-1.5 text-slate-400 hover:text-blue-500 transition-colors text-sm font-medium">
                       <MessageCircle className="w-4 h-4" /> 5

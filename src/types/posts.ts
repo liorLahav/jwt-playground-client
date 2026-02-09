@@ -8,4 +8,5 @@ export type PostResponse = Post & {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  userName: string;
 };

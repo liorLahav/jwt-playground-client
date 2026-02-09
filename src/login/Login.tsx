@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // Define your form data type
 export type LoginInputs = {
-  username: string;
+  userName: string;
   password: string;
   storedLocation: "cookies" | "localStorage" | "httponly";
   alg: null | "HS256";
@@ -32,7 +32,8 @@ const Login = () => {
       return;
     }
 
-    console.log(`username ${data.username}, password ${data.password}`);
+    console.log(user)
+
     queryClient.invalidateQueries();
     navigate("/");
     reset();
@@ -53,7 +54,7 @@ const Login = () => {
             <div className="flex flex-col w-full mb-5">
               <label className="mb-2 text-lg font-medium text-gray-700">Username</label>
               <input
-                {...register("username", { required: true })}
+                {...register("userName", { required: true })}
                 type="text"
                 placeholder="Enter username"
                 className="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-orange-100 bg-gray-50"

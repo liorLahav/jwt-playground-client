@@ -4,31 +4,24 @@ import config from "../../public/config.json";
 
 export const addPost = async ({ title, content }: Post) => {
   const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("User is not authenticated");
-  }
+
   await axios.post(
     `${config.API_BASE_URL}/posts/add`,
     { title, content },
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      withCredentials: true,
     },
   );
 };
 
 export const fetchPosts = async (): Promise<PostResponse[]> => {
   const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("User is not authenticated");
-  }
 
   const response = await axios.get(`${config.API_BASE_URL}/posts/getAll`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    withCredentials: true,
   });
-  console.log("Fetched posts response:", response.data);
+
   return response.data;
 };

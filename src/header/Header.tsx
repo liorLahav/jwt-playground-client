@@ -1,15 +1,31 @@
+import { logOut } from "@/api/auth";
 import { Button } from "@/components/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const { mutateAsync: logOutHandler } = useMutation({
+    mutationFn: logOut,
+    onSuccess: () => {
+      queryClient.setQueryData(["auth"], null);
+      navigate("/login", { replace: true });
+    },
+  });
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    queryClient.clear();
-    navigate("/login");
+    const token = localStorage.getItem("token");
+    if (token) {
+      localStorage.removeItem("token");
+    } else {
+      logOutHandler();
+    }
+
+    queryClient.setQueryData(["auth"], null);
+
+    navigate("/login", { replace: true });
   };
   return (
     <header className="w-full flex py-6 bg-white/80 backdrop-blur-md border-b border-border shadow-sm sticky top-0 z-50">
