@@ -20,6 +20,7 @@ export const Header = () => {
     if (token) {
       localStorage.removeItem("token");
     } else {
+      console.log("cookie")
       logOutHandler();
     }
 

@@ -38,7 +38,7 @@ export const login = async ({
 };
 
 export const logOut = async () =>
-  await axios.post(`${config.API_BASE_URL}/auth/logout`, {});
+  await axios.post(`${config.API_BASE_URL}/auth/logout`, {}, {withCredentials: true});
 
 export const fetchUser = async () => {
   const token = localStorage.getItem("token");
