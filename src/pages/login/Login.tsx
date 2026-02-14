@@ -25,14 +25,11 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     const user = await loginUser(data);
-    console.log("Login response user:", user);
 
     if (!user) {
       alert("Login failed");
       return;
     }
-
-    console.log(user)
 
     queryClient.invalidateQueries();
     navigate("/");

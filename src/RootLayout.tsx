@@ -8,7 +8,7 @@ const RootLayout = () => {
     <>
       <Header />
       <main>
-        <Outlet /> {/* כאן ירונדרו העמודים (Login, Posts, etc) */}
+        <Outlet /> 
       </main>
     </>
   );

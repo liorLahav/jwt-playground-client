@@ -1,13 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./login/Login";
+import Login from "./pages/login/Login";
 import { PublicRoutes } from "./routes/PublicRoutes";
 import { ProtectedRoutes } from "./routes/ProtectedRoutes";
-import { AddPostPage } from "./pages/xss/AddPostPage";
-import { PostsPage } from "./pages/xss/PostsPage";
+import { AddPostPage } from "./pages/posts/AddPostPage";
+import { PostsPage } from "./pages/posts/PostsPage";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RootLayout from "./RootLayout";
+import { Panel } from "./pages/adminPanel/Panel";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const App = () => {
           children: [
             { path: "/", element: <PostsPage /> },
             { path: "/add-post", element: <AddPostPage /> },
+            {path: "/admin", element: <Panel /> },
           ],
         },
       ],

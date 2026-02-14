@@ -10,7 +10,6 @@ export const PostsPage = () => {
     queryFn: fetchPosts,
   });
 
-  const likes = () => Math.floor(Math.random() * 100) + 1;
 
   return (
     <div className="min-h-screen w-full bg-[#f8fafc] relative overflow-x-hidden font-sans text-slate-900">
@@ -80,7 +79,7 @@ export const PostsPage = () => {
                 <div className="flex items-center justify-between pt-6 border-t border-slate-100/50">
                   <div className="flex gap-4">
                     <button className="flex items-center gap-1.5 text-slate-400 hover:text-pink-500 transition-colors text-sm font-medium">
-                      <Heart className="w-4 h-4" /> {likes()}
+                      <Heart className="w-4 h-4" /> 5
                     </button>
                     <button className="flex items-center gap-1.5 text-slate-400 hover:text-blue-500 transition-colors text-sm font-medium">
                       <MessageCircle className="w-4 h-4" /> 5
