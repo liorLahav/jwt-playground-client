@@ -25,8 +25,11 @@ const App = () => {
           children: [
             { path: "/", element: <PostsPage /> },
             { path: "/add-post", element: <AddPostPage /> },
-            {path: "/admin", element: <Panel /> },
           ],
+        },
+        {
+          element: <ProtectedRoutes adminOnly />, 
+          children: [{ path: "/admin", element: <Panel /> }],
         },
       ],
     },

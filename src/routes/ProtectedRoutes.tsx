@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { UseAuth } from "./useAuth";
 
-export const ProtectedRoutes = () => {
-  const { isAuthenticated, isLoading } = UseAuth();
+export const ProtectedRoutes = ({ adminOnly }: { adminOnly?: boolean }) => {
+  const { isAuthenticated, isLoading, user } = UseAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -10,6 +10,10 @@ export const ProtectedRoutes = () => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (adminOnly && user?.role !== "admin") {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;
