@@ -8,6 +8,7 @@ export const PostsPage = () => {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
+
   });
 
 
@@ -60,18 +61,11 @@ export const PostsPage = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* Title */}
-                <h2 className="text-2xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-blue-600 transition-colors">
+                <p className="text-2xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-blue-600 transition-colors">
                   {post.title}
-                </h2>
-
-                {/* !!! VULNERABILITY ZONE !!! 
-                           This is where the XSS happens. 
-                           The content is rendered as raw HTML.
-                        */}
+                </p>
                 <div
-                  className="text-slate-600 leading-relaxed font-serif text-lg mb-8 line-clamp-4"
+                  className="text-slate-600 font-serif text-lg mb-8"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
 
