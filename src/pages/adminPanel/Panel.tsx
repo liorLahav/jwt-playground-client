@@ -1,9 +1,8 @@
-import { fetchKidVulnState, toggleKidVuln } from "@/api/auth";
 import { deleteUserById, fetchNumOfUsers, fetchUsers} from "@/api/panel";
 import { Button } from "@/components/ui/button";
 import {type User } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Shield, Users, Trash2, Loader2, UserCircle, FileKey2 } from "lucide-react";
+import { ArrowLeft, Shield, Users, Trash2, Loader2, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const Panel = () => {
@@ -18,16 +17,6 @@ export const Panel = () => {
   const { data: users, isLoading: isLoadingUsers } = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: fetchUsers,
-  });
-
-  const { data: kidVuln } = useQuery({
-    queryKey: ["kidVuln"],
-    queryFn: fetchKidVulnState,
-  });
-
-  const { mutateAsync: toggleKid, isPending: isToggling } = useMutation({
-    mutationFn: toggleKidVuln,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["kidVuln"] }),
   });
 
   const {mutateAsync: deleteUser} = useMutation({
@@ -77,27 +66,6 @@ export const Panel = () => {
           <p className="text-4xl font-black text-slate-900">
             {isLoadingCount ? "..." : numOfUsers}
           </p>
-        </div>
-
-        {/* Vulnerability Toggles */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Vulnerabilities</h2>
-          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl p-6 shadow-sm flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <FileKey2 className="w-5 h-5 text-red-500" />
-              <div>
-                <p className="font-semibold text-slate-800">KID Path Traversal</p>
-                <p className="text-xs text-slate-400">Allow path traversal via the kid JWT header field</p>
-              </div>
-            </div>
-            <button
-              onClick={() => toggleKid()}
-              disabled={isToggling}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-200"}`}
-            >
-              <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-6" : "translate-x-1"}`} />
-            </button>
-          </div>
         </div>
 
         {/* Users List Container */}
