@@ -1,3 +1,4 @@
+import { fetchKidVulnState, toggleKidVuln } from "@/api/auth";
 import { deleteUserById, fetchNumOfUsers, fetchUsers} from "@/api/panel";
 import { Button } from "@/components/ui/button";
 import {type User } from "@/types/user";
