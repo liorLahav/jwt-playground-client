@@ -1,4 +1,4 @@
-import { deleteUserById, fetchNumOfUsers, fetchUsers, fetchKidVulnState, toggleKidVuln } from "@/api/panel";
+import { deleteUserById, fetchNumOfUsers, fetchUsers} from "@/api/panel";
 import { Button } from "@/components/ui/button";
 import {type User } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
