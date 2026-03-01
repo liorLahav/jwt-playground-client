@@ -2,7 +2,9 @@ import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchKidVulnState, toggleKidVuln } from "@/api/panel";
+import { FileKey2 } from "lucide-react";
 
 // Define your form data type
 export type LoginInputs = {
@@ -22,6 +24,16 @@ const Login = () => {
   const navigate = useNavigate();
   const { loginUser } = useLogin();
   const queryClient = useQueryClient();
+
+  const { data: kidVuln } = useQuery({
+    queryKey: ["kidVuln"],
+    queryFn: fetchKidVulnState,
+  });
+
+  const { mutateAsync: toggleKid, isPending: isToggling } = useMutation({
+    mutationFn: toggleKidVuln,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["kidVuln"] }),
+  });
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     const user = await loginUser(data);
@@ -123,6 +135,21 @@ const Login = () => {
                 disabled
                 className="mt-1 block w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed"
               />
+            </div>
+
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200">
+              <div className="flex items-center gap-2">
+                <FileKey2 className="w-4 h-4 text-red-500" />
+                <label className="text-sm font-medium text-blue-800">KID Vulnerability</label>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleKid()}
+                disabled={isToggling}
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
+              >
+                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`} />
+              </button>
             </div>
           </div>
         </div>
