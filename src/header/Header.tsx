@@ -46,15 +46,17 @@ export const Header = () => {
         >
           JWT Playground
         </button>
-        {user?.role === "admin" && (
-          <Button
-            onClick={() => navigate("/admin")}
-            className="text-sm text-white hover:text-gray-900 bg-gradient-to-r from-green-600 to-teal-500 cursor-pointer"
-          >
-            <Shield />
-            Admin Panel
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {user?.role === "admin" && (
+            <Button
+              onClick={() => navigate("/admin")}
+              className="text-sm text-white hover:text-gray-900 bg-gradient-to-r from-green-600 to-teal-500 cursor-pointer"
+            >
+              <Shield />
+              Admin Panel
+            </Button>
+          )}
+        </div>
       </div>
       <div className="mr-4">
         {user && (
