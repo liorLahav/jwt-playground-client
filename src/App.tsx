@@ -13,7 +13,6 @@ import { Panel } from "./pages/adminPanel/Panel";
 const App = () => {
   const router = createBrowserRouter([
     {
-      // שלב 1: ה-Layout הראשי עוטף את הכל
       element: <RootLayout />,
       children: [
         {

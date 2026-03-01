@@ -3,8 +3,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchKidVulnState, toggleKidVuln } from "@/api/panel";
-import { FileKey2 } from "lucide-react";
+import { fetchKidVulnState, toggleKidVuln } from "@/api/auth";
+import { FileKey2, Unlock } from "lucide-react";
 
 // Define your form data type
 export type LoginInputs = {
@@ -49,19 +49,23 @@ const Login = () => {
   };
 
   return (
-    <div className="w-[90%] flex flex-col items-center mt-10">
+    <div className="w-[90%] flex flex-col items-center mt-2">
       {/* Single form containing both sections */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex flex-col items-center"
       >
-        <div className="flex flex-row justify-center w-full space-x-10 h-110">
+        <div className="flex flex-row justify-center w-full space-x-10 h-130">
           {/* Username/Password */}
           <div className="w-[40%] bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg flex flex-col">
-            <div className="text-2xl font-bold mb-6 text-gray-800 text-center">Login</div>
+            <div className="text-2xl font-bold mb-6 text-gray-800 text-center">
+              Login
+            </div>
 
             <div className="flex flex-col w-full mb-5">
-              <label className="mb-2 text-lg font-medium text-gray-700">Username</label>
+              <label className="mb-2 text-lg font-medium text-gray-700">
+                Username
+              </label>
               <input
                 {...register("userName", { required: true })}
                 type="text"
@@ -71,7 +75,9 @@ const Login = () => {
             </div>
 
             <div className="flex flex-col w-full mb-5">
-              <label className="mb-2 text-lg font-medium text-gray-700">Password</label>
+              <label className="mb-2 text-lg font-medium text-gray-700">
+                Password
+              </label>
               <input
                 {...register("password", { required: true })}
                 type="password"
@@ -83,10 +89,14 @@ const Login = () => {
 
           {/* JWT Authentication Options */}
           <div className="w-[40%] bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl shadow-lg flex flex-col">
-            <div className="text-2xl font-bold mb-4 text-blue-900">JWT Authentication Options</div>
+            <div className="text-2xl font-bold mb-4 text-blue-900">
+              JWT Authentication Options
+            </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-blue-800">Storage Location</label>
+              <label className="block text-sm font-medium text-blue-800">
+                Storage Location
+              </label>
               <select
                 {...register("storedLocation")}
                 className="mt-1 block w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-blue-50"
@@ -99,7 +109,9 @@ const Login = () => {
             {storedLocation === "cookies" && (
               <>
                 <div className="mb-2">
-                  <label className="block text-sm font-medium text-blue-800">SameSite</label>
+                  <label className="block text-sm font-medium text-blue-800">
+                    SameSite
+                  </label>
                   <select
                     {...register("sameSite")}
                     className="mt-1 block w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-blue-50"
@@ -111,24 +123,40 @@ const Login = () => {
                 </div>
 
                 <div className="flex items-center mt-2">
-                  <input {...register("secure")} type="checkbox" className="mr-2" />
-                  <label className="text-sm font-medium text-blue-800">Secure</label>
+                  <input
+                    {...register("secure")}
+                    type="checkbox"
+                    className="mr-2"
+                  />
+                  <label className="text-sm font-medium text-blue-800">
+                    Secure
+                  </label>
                 </div>
 
                 <div className="flex items-center mt-2">
-                  <input {...register("httpOnly")} type="checkbox" className="mr-2" />
-                  <label className="text-sm font-medium text-blue-800">HTTP Only</label>
+                  <input
+                    {...register("httpOnly")}
+                    type="checkbox"
+                    className="mr-2"
+                  />
+                  <label className="text-sm font-medium text-blue-800">
+                    HTTP Only
+                  </label>
                 </div>
               </>
             )}
 
             <div className="flex items-center mt-4">
               <input {...register("exp")} type="checkbox" className="mr-2" />
-              <label className="text-sm font-medium text-blue-800">Include Expiration</label>
+              <label className="text-sm font-medium text-blue-800">
+                Include Expiration
+              </label>
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium text-blue-800">Algorithm</label>
+              <label className="block text-sm font-medium text-blue-800">
+                Algorithm
+              </label>
               <input
                 type="text"
                 value="HS256"
@@ -137,10 +165,12 @@ const Login = () => {
               />
             </div>
 
-            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200">
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 ">
               <div className="flex items-center gap-2">
                 <FileKey2 className="w-4 h-4 text-red-500" />
-                <label className="text-sm font-medium text-blue-800">KID Vulnerability</label>
+                <label className="text-sm font-medium text-blue-800">
+                  KID Vulnerability
+                </label>
               </div>
               <button
                 type="button"
@@ -148,7 +178,27 @@ const Login = () => {
                 disabled={isToggling}
                 className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
               >
-                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`} />
+                <span
+                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
+                />
+              </button>
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 ">
+              <div className="flex items-center gap-2">
+                <Unlock className="w-4 h-4 text-red-500" />
+                <label className="text-sm font-medium text-blue-800">
+                  Broken Access Control Vulnerability
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleKid()}
+                disabled={isToggling}
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
+              >
+                <span
+                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
+                />
               </button>
             </div>
           </div>

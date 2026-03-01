@@ -26,24 +26,6 @@ export const fetchUsers = async () => {
   return response.data;
 };
 
-export const fetchKidVulnState = async () => {
-  const token = localStorage.getItem("token");
-  const response = await axios.get(`${config.API_BASE_URL}/panel/kidVuln`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-    withCredentials: true,
-  });
-  return response.data as { enabled: boolean };
-};
-
-export const toggleKidVuln = async () => {
-  const token = localStorage.getItem("token");
-  const response = await axios.post(`${config.API_BASE_URL}/panel/kidVuln`, {}, {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-    withCredentials: true,
-  });
-  return response.data as { enabled: boolean };
-};
-
 export const deleteUserById = async (userId: string) => {
   const token = localStorage.getItem("token");
 

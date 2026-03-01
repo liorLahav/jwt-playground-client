@@ -14,7 +14,7 @@ export const login = async ({
 }: LoginInputs) => {
   const res = await axios.post(
     `${config.API_BASE_URL}/auth/login`,
-    {
+{
       userName,
       password,
       storedLocation,
@@ -53,4 +53,15 @@ export const fetchUser = async () => {
   });
 
   return user.data;
+};
+
+export const fetchKidVulnState = async (): Promise<{ enabled: boolean }> => {
+  const response = await axios.get(`${config.API_BASE_URL}/auth/kidVuln`)
+  return response.data;
+};
+
+export const toggleKidVuln = async (): Promise<{ enabled: boolean }> => {
+  const response = await axios.post(`${config.API_BASE_URL}/auth/kidVuln`, {});
+  console.log("Toggled KID Vuln, new state:", response.data);
+  return response.data;
 };
