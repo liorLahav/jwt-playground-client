@@ -1,0 +1,179 @@
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { useLogin } from "@/hooks/useLogin";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { FileKey2, Unlock } from "lucide-react";
+import { useVuln } from "@/hooks/useVuln";
+
+// Define your form data type
+export type LoginInputs = {
+  userName: string;
+  password: string;
+  storedLocation: "cookies" | "localStorage";
+  sameSite: "none" | "lax" | "strict";
+  httpOnly: true | false;
+};
+
+const Login = () => {
+  const { register, handleSubmit, reset, watch } = useForm<LoginInputs>();
+  const storedLocation = watch("storedLocation");
+  const navigate = useNavigate();
+  const { loginUser } = useLogin();
+  const queryClient = useQueryClient();
+
+  const {
+    kidVuln,
+    bacVuln,
+    toggleKid,
+    toggleBac,
+    isTogglingKid,
+    isTogglingBac,
+  } = useVuln();
+
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    const user = await loginUser(data);
+
+    if (!user) {
+      alert("Login failed");
+      return;
+    }
+    queryClient.invalidateQueries();
+    navigate("/");
+    reset();
+  };
+
+  return (
+    <div className="w-[90%] flex flex-col items-center mt-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex flex-col items-center"
+      >
+        <div className="flex flex-row justify-center w-full space-x-10 h-110">
+          {/* Username/Password */}
+          <div className="w-[40%] bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg flex flex-col">
+            <div className="text-2xl font-bold mb-6 text-gray-800 text-center">
+              Login
+            </div>
+
+            <div className="flex flex-col w-full mb-5">
+              <label className="mb-2 text-lg font-medium text-gray-700">
+                Username
+              </label>
+              <input
+                {...register("userName", { required: true })}
+                type="text"
+                placeholder="Enter username"
+                className="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-orange-100 bg-gray-50"
+              />
+            </div>
+
+            <div className="flex flex-col w-full mb-5">
+              <label className="mb-2 text-lg font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                {...register("password", { required: true })}
+                type="password"
+                placeholder="Enter password"
+                className="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-orange-100 bg-gray-50"
+              />
+            </div>
+          </div>
+
+          {/* JWT Authentication Options */}
+          <div className="w-[40%] bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl shadow-lg flex flex-col">
+            <div className="text-2xl font-bold mb-4 text-blue-900">
+              JWT Authentication Options
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-blue-800">
+                Storage Location
+              </label>
+              <select
+                {...register("storedLocation")}
+                className="mt-1 block w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-blue-50"
+              >
+                <option value="localStorage">Local Storage</option>
+                <option value="cookies">Cookies</option>
+              </select>
+            </div>
+
+            {storedLocation === "cookies" && (
+              <>
+                <div className="mb-2">
+                  <label className="block text-sm font-medium text-blue-800">
+                    SameSite
+                  </label>
+                  <select
+                    {...register("sameSite")}
+                    className="mt-1 block w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-blue-50"
+                  >
+                    <option value="none">None</option>
+                    <option value="lax">Lax</option>
+                    <option value="strict">Strict</option>
+                  </select>
+                </div>
+                <div className="flex items-center mt-2">
+                  <input
+                    {...register("httpOnly")}
+                    type="checkbox"
+                    className="mr-2"
+                  />
+                  <label className="text-sm font-medium text-blue-800">
+                    HTTP Only
+                  </label>
+                </div>
+              </>
+            )}
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 ">
+              <div className="flex items-center gap-2">
+                <FileKey2 className="w-4 h-4 text-red-500" />
+                <label className="text-sm font-medium text-blue-800">
+                  KID Vulnerability
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleKid()}
+                disabled={isTogglingKid}
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
+              >
+                <span
+                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
+                />
+              </button>
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 ">
+              <div className="flex items-center gap-2">
+                <Unlock className="w-4 h-4 text-red-500" />
+                <label className="text-sm font-medium text-blue-800">
+                  Broken Access Control Vulnerability
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleBac()}
+                disabled={isTogglingBac}
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${bacVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
+              >
+                <span
+                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${bacVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="cursor-pointer mt-6 bg-gradient-to-br from-orange-50 to-blue-50 text-gray-800 font-semibold py-2 px-6 rounded hover:bg-gray-200 transition duration-300 border border-gray-300"
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
