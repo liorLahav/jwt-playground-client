@@ -6,11 +6,8 @@ export const login = async ({
   userName,
   password,
   storedLocation,
-  alg,
-  exp,
   httpOnly,
   sameSite,
-  secure,
 }: LoginInputs) => {
   const res = await axios.post(
     `${config.API_BASE_URL}/auth/login`,
@@ -18,11 +15,8 @@ export const login = async ({
       userName,
       password,
       storedLocation,
-      alg,
-      exp,
       httpOnly,
       sameSite,
-      secure,
     },
     {
       withCredentials: true,
