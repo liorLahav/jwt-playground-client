@@ -2,9 +2,9 @@ import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchKidVulnState, toggleKidVuln } from "@/api/auth";
+import { useQueryClient } from "@tanstack/react-query";
 import { FileKey2, Unlock } from "lucide-react";
+import { useVuln } from "@/hooks/useVuln";
 
 // Define your form data type
 export type LoginInputs = {
@@ -25,15 +25,14 @@ const Login = () => {
   const { loginUser } = useLogin();
   const queryClient = useQueryClient();
 
-  const { data: kidVuln } = useQuery({
-    queryKey: ["kidVuln"],
-    queryFn: fetchKidVulnState,
-  });
-
-  const { mutateAsync: toggleKid, isPending: isToggling } = useMutation({
-    mutationFn: toggleKidVuln,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["kidVuln"] }),
-  });
+  const {
+    kidVuln,
+    bacVuln,
+    toggleKid,
+    toggleBac,
+    isTogglingKid,
+    isTogglingBac,
+  } = useVuln();
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     const user = await loginUser(data);
@@ -42,7 +41,6 @@ const Login = () => {
       alert("Login failed");
       return;
     }
-
     queryClient.invalidateQueries();
     navigate("/");
     reset();
@@ -50,7 +48,6 @@ const Login = () => {
 
   return (
     <div className="w-[90%] flex flex-col items-center mt-2">
-      {/* Single form containing both sections */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex flex-col items-center"
@@ -175,7 +172,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => toggleKid()}
-                disabled={isToggling}
+                disabled={isTogglingKid}
                 className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
               >
                 <span
@@ -192,19 +189,18 @@ const Login = () => {
               </div>
               <button
                 type="button"
-                onClick={() => toggleKid()}
-                disabled={isToggling}
-                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${kidVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
+                onClick={() => toggleBac()}
+                disabled={isTogglingBac}
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 cursor-pointer ${bacVuln?.enabled ? "bg-red-500" : "bg-slate-300"}`}
               >
                 <span
-                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${kidVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
+                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${bacVuln?.enabled ? "translate-x-4.5" : "translate-x-0.75"}`}
                 />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Login button centered below both sections */}
         <button
           type="submit"
           className="cursor-pointer mt-6 bg-gradient-to-br from-orange-50 to-blue-50 text-gray-800 font-semibold py-2 px-6 rounded hover:bg-gray-200 transition duration-300 border border-gray-300"
