@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +9,8 @@ import { useVuln } from "@/hooks/useVuln";
 export type LoginInputs = {
   userName: string;
   password: string;
-  storedLocation: "cookies" | "localStorage" | "httponly";
-  alg: null | "HS256";
-  exp: true | false;
+  storedLocation: "cookies" | "localStorage";
   sameSite: "none" | "lax" | "strict";
-  secure: true | false;
   httpOnly: true | false;
 };
 
@@ -52,7 +48,7 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex flex-col items-center"
       >
-        <div className="flex flex-row justify-center w-full space-x-10 h-130">
+        <div className="flex flex-row justify-center w-full space-x-10 h-110">
           {/* Username/Password */}
           <div className="w-[40%] bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg flex flex-col">
             <div className="text-2xl font-bold mb-6 text-gray-800 text-center">
@@ -118,18 +114,6 @@ const Login = () => {
                     <option value="strict">Strict</option>
                   </select>
                 </div>
-
-                <div className="flex items-center mt-2">
-                  <input
-                    {...register("secure")}
-                    type="checkbox"
-                    className="mr-2"
-                  />
-                  <label className="text-sm font-medium text-blue-800">
-                    Secure
-                  </label>
-                </div>
-
                 <div className="flex items-center mt-2">
                   <input
                     {...register("httpOnly")}
@@ -142,26 +126,6 @@ const Login = () => {
                 </div>
               </>
             )}
-
-            <div className="flex items-center mt-4">
-              <input {...register("exp")} type="checkbox" className="mr-2" />
-              <label className="text-sm font-medium text-blue-800">
-                Include Expiration
-              </label>
-            </div>
-
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-blue-800">
-                Algorithm
-              </label>
-              <input
-                type="text"
-                value="HS256"
-                disabled
-                className="mt-1 block w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed"
-              />
-            </div>
-
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 ">
               <div className="flex items-center gap-2">
                 <FileKey2 className="w-4 h-4 text-red-500" />
